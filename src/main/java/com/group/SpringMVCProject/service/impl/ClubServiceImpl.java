@@ -43,6 +43,12 @@ public class ClubServiceImpl implements ClubService {
         Club club = mapToClub(clubDto);
         clubRepository.save(club);
     }
+
+    @Override
+    public void deleteClubById(Long clubId) {
+        clubRepository.deleteById(clubId);
+    }
+
     private Club mapToClub(ClubDto club) {
         Club clubDto = Club.builder()
                 .id(club.getId())

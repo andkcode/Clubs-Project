@@ -21,6 +21,7 @@
                         <img class="img-fluid rounded-3 mb-3" th:src="${club.photoUrl}" alt="Club Image" />
                         <a class="h3 fw-bolder text-decoration-none link-dark stretched-link" th:text="${club.title}" href="#!"></a>
                     </div>
+s                    <a class="btn btn-primary" th:href="@{/clubs/{clubId}(clubId=${club.id})}">View</a>
                     <a class="btn btn-primary" th:href="@{/clubs/{clubId}/edit(clubId=${club.id})}">Edit</a>
                 </div>
             </div>
