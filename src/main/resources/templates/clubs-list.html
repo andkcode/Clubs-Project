@@ -16,6 +16,11 @@
                 <p class="lead fw-normal text-muted mb-0">Clubs find in your area!</p>
             </div>
             <div class="row gx-5">
+                <div>
+                    <form th:action="@{/clubs/search}" class="form-inline my-2 my-lg-0 mb-3">
+                        <input name="query" class="form-control mr-sm-2 mb-5" type="search" placeholder="Search clubs..." aria-label="Search">
+                    </form>
+                </div>
                 <div class="col-lg-6 mb-2" th:each="club : ${clubs}">
                     <div class="position-relative mb-3">
                         <img class="img-fluid rounded-3 mb-3" th:src="${club.photoUrl}" alt="Club Image" />
