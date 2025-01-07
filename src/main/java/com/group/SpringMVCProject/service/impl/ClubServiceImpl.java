@@ -36,7 +36,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public ClubDto findClubById(long clubId) {
+    public ClubDto findClubById(Long clubId) {
         Club club = clubRepository.findById(clubId).get();
         return mapToClubDto(club);
     }
