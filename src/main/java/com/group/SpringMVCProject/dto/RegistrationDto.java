@@ -12,6 +12,4 @@ public class RegistrationDto {
     private String email;
     @NotEmpty
     private String password;
-    @NotEmpty
-    private String confirmPassword;
 }
