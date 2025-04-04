@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface EventService {
 
-    void createEvent(Long clubId, EventDto eventDto);
+    void createEvent(Long id, EventDto eventDto);
 
     List<EventDto> findAllEvents();
 
-    EventDto findEventById(Long eventId);
+    EventDto findEventById(Long id);
 
     void updateEvent(EventDto eventDto);
 
-    void deleteEvent(Long eventId);
+    void deleteEvent(Long id);
 }

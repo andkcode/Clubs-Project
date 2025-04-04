@@ -27,8 +27,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void createEvent(Long clubId, EventDto eventDto) {
-        Club club = clubRepository.findById(clubId).get();
+    public void createEvent(Long id, EventDto eventDto) {
+        Club club = clubRepository.findById(id).get();
         Event event = mapToEvent(eventDto);
         event.setClub(club);
         eventRepository.save(event);
@@ -41,8 +41,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDto findEventById(Long eventId) {
-        Event event = eventRepository.findById(eventId).get();
+    public EventDto findEventById(Long id) {
+        Event event = eventRepository.findById(id).get();
         return mapToEventDto(event);
     }
 
@@ -53,7 +53,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void deleteEvent(Long eventId) {
-        eventRepository.deleteById(eventId);
+    public void deleteEvent(Long id) {
+        eventRepository.deleteById(id);
     }
 }
