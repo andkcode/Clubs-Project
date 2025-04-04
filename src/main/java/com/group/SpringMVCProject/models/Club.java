@@ -35,4 +35,7 @@ public class Club {
     @OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE)
     private List<Event> events = new ArrayList<>();
 
+    public Club(Long clubId) {
+        this.id = id;
+    }
 }

@@ -8,10 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClubDto {
@@ -25,5 +24,4 @@ public class ClubDto {
     private UserEntity createdBy;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
-    private List<EventDto> events;
 }
