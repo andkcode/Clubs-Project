@@ -28,27 +28,27 @@ public class ClubController {
         return clubService.findAllClubs(); // Returns JSON for Vue
     }
 
-    @GetMapping("/search")
+    @GetMapping("/clubs/search")
     public List<ClubDto> searchClub(@RequestParam("query") String query) {
         return clubService.searchClubs(query); // Returns filtered results
     }
 
-    @DeleteMapping("/{clubId}")
+    @DeleteMapping("/clubs/{clubId}")
     public void deleteClub(@PathVariable Long clubId) {
         clubService.deleteClubById(clubId); // Deletes a club
     }
 
-    @GetMapping("/{clubId}")
+    @GetMapping("/clubs/{clubId}")
     public ClubDto clubDetail(@PathVariable Long clubId) {
         return clubService.findClubById(clubId); // Returns a single club as JSON
     }
 
-    @PostMapping("/new")
+    @PostMapping("/clubs/new")
     public Club saveClub(@Valid @RequestBody ClubDto clubDto) {
         return clubService.saveClub(clubDto); // Saves and returns the new club
     }
 
-    @PutMapping("/{clubId}")
+    @PutMapping("/clubs/{clubId}")
     public ClubDto updateClub(@PathVariable Long clubId, @Valid @RequestBody ClubDto clubDto) {
         clubDto.setId(clubId);
         return clubService.updateClub(clubDto); // Updates and returns the club
