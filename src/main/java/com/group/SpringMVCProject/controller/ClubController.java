@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clubs") // API Endpoint for Vue.js
+@RequestMapping("/clubs") // API Endpoint for Vue.js
 @CrossOrigin(origins = "http://localhost:5173") // Allow frontend to access the API (change to your frontend URL)
 public class ClubController {
     private final ClubService clubService;
