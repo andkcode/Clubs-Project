@@ -27,11 +27,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void createEvent(Long id, EventDto eventDto) {
+    public Event createEvent(Long id, EventDto eventDto) {
         Club club = clubRepository.findById(id).get();
         Event event = mapToEvent(eventDto);
         event.setClub(club);
         eventRepository.save(event);
+        return event;
     }
 
     @Override
@@ -47,9 +48,10 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void updateEvent(EventDto eventDto) {
+    public EventDto updateEvent(EventDto eventDto) {
         Event event = mapToEvent(eventDto);
         eventRepository.save(event);
+        return eventDto;
     }
 
     @Override
