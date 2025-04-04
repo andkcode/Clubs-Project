@@ -19,8 +19,8 @@ public class ClubDto {
     private String title;
     @NotEmpty(message = "Photo link should not be empty")
     private String photoUrl;
-    @NotEmpty(message = "Content should not be empty")
-    private String content;
+    @NotEmpty(message = "Description should not be empty")
+    private String description;
     private UserEntity createdBy;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
