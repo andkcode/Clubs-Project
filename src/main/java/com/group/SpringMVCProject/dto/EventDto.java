@@ -1,7 +1,5 @@
 package com.group.SpringMVCProject.dto;
 
-
-import com.group.SpringMVCProject.models.Club;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,5 +26,5 @@ public class EventDto {
     private String photoUrl;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
-    private Club club;
+    private Long clubId;
 }
