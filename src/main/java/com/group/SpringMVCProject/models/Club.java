@@ -1,5 +1,6 @@
 package com.group.SpringMVCProject.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,8 +25,10 @@ public class Club {
     private String title;
     private String photoUrl;
     private String description;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @CreationTimestamp
     private LocalDateTime createdOn;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @UpdateTimestamp
     private LocalDateTime updatedOn;
 
