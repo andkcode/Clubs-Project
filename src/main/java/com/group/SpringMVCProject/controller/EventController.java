@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class EventController {
 
-    private EventService eventService;
-    private UserService userService;
+    private final EventService eventService;
+    private final UserService userService;
 
     @Autowired
     public EventController(EventService eventService, UserService userService) {
@@ -32,11 +33,11 @@ public class EventController {
 
     @GetMapping("/events")
     public String eventList(Model model) {
-        UserEntity user = new UserEntity();
+        Optional<UserEntity> user = Optional.of(new UserEntity());
         List<EventDto> events = eventService.findAllEvents();
         String username = SecurityUtil.getSessionUser();
         if(username != null) {
-            user = userService.findByUsername(username);
+            user = Optional.ofNullable(userService.findByUsername(username));
             model.addAttribute("user",user);
         }
         model.addAttribute("user",user);
@@ -46,11 +47,11 @@ public class EventController {
 
     @GetMapping("/events/{eventId}")
     public String viewEvent(@PathVariable("eventId") Long eventId, Model model) {
-        UserEntity user = new UserEntity();
+        Optional<UserEntity> user = Optional.of(new UserEntity());
         EventDto eventDto = eventService.findEventById(eventId);
         String username = SecurityUtil.getSessionUser();
         if(username != null) {
-            user = userService.findByUsername(username);
+            user = Optional.ofNullable(userService.findByUsername(username));
             model.addAttribute("user",user);
         }
         model.addAttribute("club",eventDto);
@@ -91,7 +92,7 @@ public class EventController {
             return "events-edit";
         }
         EventDto eventDto = eventService.findEventById(eventId);
-        event.setId(eventId);
+        event.setId(event.getId());
         event.setClub(eventDto.getClub());
         eventService.updateEvent(event);
         return "redirect:/events";
