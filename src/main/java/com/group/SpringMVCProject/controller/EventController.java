@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/events") // Changed to a clear REST endpoint
+@RequestMapping("/events")
 @CrossOrigin(origins = "http://localhost:5173") // Allow frontend access
 public class EventController {
 
@@ -24,28 +24,33 @@ public class EventController {
         this.userService = userService;
     }
 
+
     @GetMapping
     public List<EventDto> listEvents() {
         return eventService.findAllEvents();
     }
+
 
     @GetMapping("/{eventId}")
     public EventDto getEvent(@PathVariable Long eventId) {
         return eventService.findEventById(eventId);
     }
 
+
     @PostMapping("/new/{clubId}")
     public Event createEvent(@PathVariable Long clubId, @Valid @RequestBody EventDto eventDto) {
         return eventService.createEvent(clubId, eventDto);
     }
 
+
     @PutMapping("/{eventId}")
     public EventDto updateEvent(@PathVariable Long eventId, @Valid @RequestBody EventDto eventDto) {
         EventDto existing = eventService.findEventById(eventId);
         eventDto.setId(eventId);
-        eventDto.setClub(existing.getClub());
+        eventDto.setClubId(existing.getClubId());
         return eventService.updateEvent(eventDto);
     }
+
 
     @DeleteMapping("/{eventId}")
     public void deleteEvent(@PathVariable Long eventId) {
