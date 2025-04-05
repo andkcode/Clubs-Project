@@ -15,7 +15,6 @@ import java.util.Set;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name="clubs")
 public class Club {
@@ -40,5 +39,16 @@ public class Club {
 
     public Club(Long clubId) {
         this.id = id;
+    }
+
+    public Club(Long id, String title, String photoUrl, String description, LocalDateTime createdOn, LocalDateTime updatedOn, UserEntity createdBy, List<Event> events) {
+        this.id = id;
+        this.title = title;
+        this.photoUrl = photoUrl;
+        this.description = description;
+        this.createdOn = LocalDateTime.now();
+        this.updatedOn = LocalDateTime.now();
+        this.createdBy = createdBy;
+        this.events = events;
     }
 }
