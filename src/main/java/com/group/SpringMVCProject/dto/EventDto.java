@@ -15,7 +15,8 @@ import java.time.LocalDateTime;
 public class EventDto {
     private Long id;
     @NotEmpty(message = "Event name should not be empty")
-    private String name;
+    private String title;
+    private String description;
     @NotEmpty(message = "Start Time should not be empty")
     private LocalDateTime startTime;
     @NotEmpty(message = "End Time should not be empty")
