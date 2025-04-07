@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/clubs", "/clubs/*").permitAll() // ⬅️ Make these public
+                .requestMatchers("/clubs", "/clubs/*", "/events","/events/*").permitAll() // ⬅️ Make these public
                 .requestMatchers("/clubs/admin/**").authenticated() // ⬅️ Admin stuff requires auth
                 .anyRequest().authenticated()
                 .and()
