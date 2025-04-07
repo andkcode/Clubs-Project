@@ -31,9 +31,14 @@ public class EventController {
     }
 
 
-    @GetMapping("/{eventId}")
+    @GetMapping("/event/{eventId}")
     public EventDto getEvent(@PathVariable Long eventId) {
         return eventService.findEventById(eventId);
+    }
+
+    @GetMapping("/club/{clubId}")
+    public List<EventDto> getEventByClubId(@PathVariable Long clubId) {
+        return eventService.findEventsByClubId(clubId);
     }
 
 
