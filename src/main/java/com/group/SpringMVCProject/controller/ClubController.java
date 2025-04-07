@@ -33,12 +33,12 @@ public class ClubController {
         return clubService.searchClubs(query); // Returns filtered results
     }
 
-    @DeleteMapping("/clubs/{clubId}")
+    @DeleteMapping("/{clubId}")
     public void deleteClub(@PathVariable Long clubId) {
         clubService.deleteClubById(clubId); // Deletes a club
     }
 
-    @GetMapping("/clubs/{clubId}")
+    @GetMapping("/{clubId}")
     public ClubDto clubDetail(@PathVariable Long clubId) {
         return clubService.findClubById(clubId); // Returns a single club as JSON
     }
@@ -48,7 +48,7 @@ public class ClubController {
         return clubService.saveClub(clubDto); // Saves and returns the new club
     }
 
-    @PutMapping("/clubs/{clubId}")
+    @PutMapping("/{clubId}")
     public ClubDto updateClub(@PathVariable Long clubId, @Valid @RequestBody ClubDto clubDto) {
         clubDto.setId(clubId);
         return clubService.updateClub(clubDto); // Updates and returns the club
