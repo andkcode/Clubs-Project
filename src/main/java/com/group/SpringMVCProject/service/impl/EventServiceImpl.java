@@ -58,4 +58,14 @@ public class EventServiceImpl implements EventService {
     public void deleteEvent(Long id) {
         eventRepository.deleteById(id);
     }
+
+    @Override
+    public List<EventDto> findEventsByClubId(Long clubId) {
+        Club club = clubRepository.findById(clubId).orElseThrow(() ->
+                new RuntimeException("Club not found with id: " + clubId));
+        List<Event> events = eventRepository.findByClubId(clubId);
+        return events.stream()
+                .map(event -> mapToEventDto(event))
+                .collect(Collectors.toList());
+    }
 }
