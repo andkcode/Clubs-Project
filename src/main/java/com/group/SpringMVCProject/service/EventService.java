@@ -1,18 +1,21 @@
 package com.group.SpringMVCProject.service;
 
 import com.group.SpringMVCProject.dto.EventDto;
+import com.group.SpringMVCProject.models.Event;
 
 import java.util.List;
 
 public interface EventService {
 
-    void createEvent(Long clubId, EventDto eventDto);
+    Event createEvent(Long id, EventDto eventDto);
 
     List<EventDto> findAllEvents();
 
-    EventDto findEventById(Long eventId);
+    EventDto findEventById(Long id);
 
-    void updateEvent(EventDto eventDto);
+    EventDto updateEvent(EventDto eventDto);
 
-    void deleteEvent(Long eventId);
+    void deleteEvent(Long id);
+
+    List<EventDto> findEventsByClubId(Long clubId);
 }

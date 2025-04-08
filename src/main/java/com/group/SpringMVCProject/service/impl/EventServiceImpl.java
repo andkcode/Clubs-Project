@@ -27,11 +27,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void createEvent(Long clubId, EventDto eventDto) {
-        Club club = clubRepository.findById(clubId).get();
+    public Event createEvent(Long id, EventDto eventDto) {
+        Club club = clubRepository.findById(id).get();
         Event event = mapToEvent(eventDto);
         event.setClub(club);
         eventRepository.save(event);
+        return event;
     }
 
     @Override
@@ -41,19 +42,30 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDto findEventById(Long eventId) {
-        Event event = eventRepository.findById(eventId).get();
+    public EventDto findEventById(Long id) {
+        Event event = eventRepository.findById(id).get();
         return mapToEventDto(event);
     }
 
     @Override
-    public void updateEvent(EventDto eventDto) {
+    public EventDto updateEvent(EventDto eventDto) {
         Event event = mapToEvent(eventDto);
         eventRepository.save(event);
+        return eventDto;
     }
 
     @Override
-    public void deleteEvent(Long eventId) {
-        eventRepository.deleteById(eventId);
+    public void deleteEvent(Long id) {
+        eventRepository.deleteById(id);
+    }
+
+    @Override
+    public List<EventDto> findEventsByClubId(Long clubId) {
+        Club club = clubRepository.findById(clubId).orElseThrow(() ->
+                new RuntimeException("Club not found with id: " + clubId));
+        List<Event> events = eventRepository.findByClubId(clubId);
+        return events.stream()
+                .map(event -> mapToEventDto(event))
+                .collect(Collectors.toList());
     }
 }

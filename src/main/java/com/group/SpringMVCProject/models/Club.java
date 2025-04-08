@@ -1,10 +1,8 @@
 package com.group.SpringMVCProject.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,9 +13,8 @@ import java.util.List;
 import java.util.Set;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@NoArgsConstructor
 @Entity
 @Table(name="clubs")
 public class Club {
@@ -26,9 +23,11 @@ public class Club {
     private Long id;
     private String title;
     private String photoUrl;
-    private String content;
+    private String description;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @CreationTimestamp
     private LocalDateTime createdOn;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @UpdateTimestamp
     private LocalDateTime updatedOn;
 
@@ -37,4 +36,19 @@ public class Club {
     private UserEntity createdBy;
     @OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE)
     private List<Event> events = new ArrayList<>();
+
+    public Club(Long clubId) {
+        this.id = id;
+    }
+
+    public Club(Long id, String title, String photoUrl, String description, LocalDateTime createdOn, LocalDateTime updatedOn, UserEntity createdBy, List<Event> events) {
+        this.id = id;
+        this.title = title;
+        this.photoUrl = photoUrl;
+        this.description = description;
+        this.createdOn = LocalDateTime.now();
+        this.updatedOn = LocalDateTime.now();
+        this.createdBy = createdBy;
+        this.events = events;
+    }
 }
