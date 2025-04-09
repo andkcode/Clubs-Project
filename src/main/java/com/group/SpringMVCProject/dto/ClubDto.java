@@ -24,4 +24,5 @@ public class ClubDto {
     private UserEntity createdBy;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
+    private String location;
 }

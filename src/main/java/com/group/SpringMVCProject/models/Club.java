@@ -8,12 +8,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name="clubs")
@@ -23,6 +22,7 @@ public class Club {
     private Long id;
     private String title;
     private String photoUrl;
+    private String location;
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @CreationTimestamp
