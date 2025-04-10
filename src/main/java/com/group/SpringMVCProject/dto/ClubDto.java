@@ -26,5 +26,6 @@ public class ClubDto {
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
     private String location;
-    private City cityName;
+    private String cityName;
+    private String countryName;
 }
