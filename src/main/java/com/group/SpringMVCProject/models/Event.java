@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name="events")
@@ -20,6 +21,7 @@ public class Event {
     private String description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private String location;
     private String type;
     private String photoUrl;
     @CreationTimestamp
@@ -27,20 +29,12 @@ public class Event {
     @UpdateTimestamp
     private LocalDateTime updatedOn;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="club_id", nullable = false)
     private Club club;
 
-    public Event(Long id, String title, String description, LocalDateTime startTime, LocalDateTime endTime, String type, String photoUrl, LocalDateTime createdOn, LocalDateTime updatedOn, Club club) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.type = type;
-        this.photoUrl = photoUrl;
-        this.createdOn = LocalDateTime.now();
-        this.updatedOn = LocalDateTime.now();
-        this.club = club;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="city_id")
+    private City city;
+
 }

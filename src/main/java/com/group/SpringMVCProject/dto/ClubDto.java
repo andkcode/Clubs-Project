@@ -1,5 +1,6 @@
 package com.group.SpringMVCProject.dto;
 
+import com.group.SpringMVCProject.models.City;
 import com.group.SpringMVCProject.models.UserEntity;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -24,4 +25,7 @@ public class ClubDto {
     private UserEntity createdBy;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
+    private String location;
+    private String cityName;
+    private String countryName;
 }

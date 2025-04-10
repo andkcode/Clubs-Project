@@ -8,12 +8,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name="clubs")
@@ -34,8 +33,13 @@ public class Club {
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)
     private UserEntity createdBy;
+
     @OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE)
     private List<Event> events = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="city_id")
+    private City city;
 
     public Club(Long clubId) {
         this.id = id;

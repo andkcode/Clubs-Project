@@ -1,5 +1,6 @@
 package com.group.SpringMVCProject.dto;
 
+import com.group.SpringMVCProject.models.City;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,4 +29,6 @@ public class EventDto {
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
     private Long clubId;
+    private String cityName;
+    private String location;
 }

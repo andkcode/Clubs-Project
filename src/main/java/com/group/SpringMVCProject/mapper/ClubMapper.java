@@ -1,5 +1,6 @@
 package com.group.SpringMVCProject.mapper;
 
+import com.group.SpringMVCProject.dto.CityDto;
 import com.group.SpringMVCProject.dto.ClubDto;
 import com.group.SpringMVCProject.models.Club;
 
@@ -25,6 +26,8 @@ public class ClubMapper {
                 .createdBy(club.getCreatedBy())
                 .createdOn(club.getCreatedOn())
                 .updatedOn(club.getUpdatedOn())
+                .cityName(club.getCity().getName())
+                .countryName(club.getCity().getCountry().getName())
                 .build();
     }
 }
