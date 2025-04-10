@@ -30,4 +30,5 @@ public class EventDto {
     private LocalDateTime updatedOn;
     private Long clubId;
     private String cityName;
+    private String location;
 }

@@ -12,11 +12,13 @@ public class EventMapper {
                 .description(eventDto.getDescription())
                 .startTime(eventDto.getStartTime())
                 .endTime(eventDto.getEndTime())
+                .location(eventDto.getLocation())
                 .type(eventDto.getType())
                 .photoUrl(eventDto.getPhotoUrl())
                 .createdOn(eventDto.getCreatedOn())
                 .updatedOn(eventDto.getUpdatedOn())
                 .club(new Club(eventDto.getClubId()))
+                .location(eventDto.getLocation())
                 .build();
     }
 
@@ -33,6 +35,7 @@ public class EventMapper {
                 .updatedOn(event.getUpdatedOn())
                 .clubId(event.getClub().getId())
                 .cityName(event.getCity().getName())
+                .location(event.getLocation())
                 .build();
     }
 
