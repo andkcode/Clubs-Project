@@ -22,7 +22,6 @@ public class Club {
     private Long id;
     private String title;
     private String photoUrl;
-    private String location;
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @CreationTimestamp
@@ -34,8 +33,13 @@ public class Club {
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)
     private UserEntity createdBy;
+
     @OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE)
     private List<Event> events = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="city_id")
+    private City city;
 
     public Club(Long clubId) {
         this.id = id;
