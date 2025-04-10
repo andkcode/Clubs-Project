@@ -29,5 +29,5 @@ public class EventDto {
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
     private Long clubId;
-    private City cityName;
+    private String cityName;
 }
