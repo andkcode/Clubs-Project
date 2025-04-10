@@ -11,7 +11,7 @@ public class CountryMapper {
                 .build();
     }
 
-    public static CountryDto mapToClubDto(Country country) {
+    public static CountryDto mapToCountryDto(Country country) {
         return CountryDto.builder()
                 .id(country.getId())
                 .name(country.getName())
