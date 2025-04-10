@@ -27,11 +27,15 @@ public class Event {
     @UpdateTimestamp
     private LocalDateTime updatedOn;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="club_id", nullable = false)
     private Club club;
 
-    public Event(Long id, String title, String description, LocalDateTime startTime, LocalDateTime endTime, String type, String photoUrl, LocalDateTime createdOn, LocalDateTime updatedOn, Club club) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="city_id")
+    private City city;
+
+    public Event(Long id, String title, String description, LocalDateTime startTime, LocalDateTime endTime, String type, String photoUrl, LocalDateTime createdOn, LocalDateTime updatedOn, Club club, City city) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -39,8 +43,7 @@ public class Event {
         this.endTime = endTime;
         this.type = type;
         this.photoUrl = photoUrl;
-        this.createdOn = LocalDateTime.now();
-        this.updatedOn = LocalDateTime.now();
         this.club = club;
+        this.city = city;
     }
 }
