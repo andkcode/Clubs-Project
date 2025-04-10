@@ -25,4 +25,7 @@ public class City {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="country_id")
     private Country country;
+
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Event> events = new ArrayList<>();
 }
