@@ -22,6 +22,7 @@ public class ClubDto {
     private String photoUrl;
     @NotEmpty(message = "Description should not be empty")
     private String description;
+    private String category;
     private UserEntity createdBy;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;

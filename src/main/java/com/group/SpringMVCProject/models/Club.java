@@ -22,6 +22,7 @@ public class Club {
     private Long id;
     private String title;
     private String photoUrl;
+    private String category;
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @CreationTimestamp
