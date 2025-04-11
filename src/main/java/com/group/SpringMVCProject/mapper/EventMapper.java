@@ -17,7 +17,6 @@ public class EventMapper {
                 .photoUrl(eventDto.getPhotoUrl())
                 .createdOn(eventDto.getCreatedOn())
                 .updatedOn(eventDto.getUpdatedOn())
-                .club(new Club(eventDto.getClubId()))
                 .location(eventDto.getLocation())
                 .build();
     }

@@ -1,5 +1,6 @@
 package com.group.SpringMVCProject.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -31,6 +32,7 @@ public class Event {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="club_id", nullable = false)
+    @JsonBackReference
     private Club club;
 
     @ManyToOne(fetch = FetchType.LAZY)
