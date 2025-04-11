@@ -25,6 +25,7 @@ public class Club {
     private String photoUrl;
     private String category;
     private String description;
+    private String type;
     private Integer members;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @CreationTimestamp
