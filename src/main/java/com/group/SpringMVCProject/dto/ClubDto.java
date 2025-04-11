@@ -27,6 +27,7 @@ public class ClubDto {
     private String category;
     private UserEntity createdBy;
     private String type;
+    private List<String> tags;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
     private String location;

@@ -21,6 +21,7 @@ public class ClubMapper {
                 .members(clubDto.getMembers())
                 .createdOn(clubDto.getCreatedOn())
                 .type(clubDto.getType())
+                .tags(clubDto.getTags())
                 .updatedOn(clubDto.getUpdatedOn())
                 .build();
     }
@@ -44,6 +45,7 @@ public class ClubMapper {
                 .category(club.getCategory())
                 .description(club.getDescription())
                 .createdBy(club.getCreatedBy())
+                .tags(club.getTags())
                 .createdOn(club.getCreatedOn())
                 .updatedOn(club.getUpdatedOn())
                 .type(club.getType())
