@@ -31,5 +31,6 @@ public class ClubDto {
     private String location;
     private String cityName;
     private String countryName;
-    private List<Event> events;
+    private List<EventDto> events;
+    private Integer members;
 }
