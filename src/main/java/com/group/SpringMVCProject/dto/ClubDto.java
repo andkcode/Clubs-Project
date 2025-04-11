@@ -1,6 +1,7 @@
 package com.group.SpringMVCProject.dto;
 
 import com.group.SpringMVCProject.models.City;
+import com.group.SpringMVCProject.models.Event;
 import com.group.SpringMVCProject.models.UserEntity;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -29,4 +31,5 @@ public class ClubDto {
     private String location;
     private String cityName;
     private String countryName;
+    private List<Event> events;
 }

@@ -28,6 +28,7 @@ public class ClubMapper {
                 .createdBy(club.getCreatedBy())
                 .createdOn(club.getCreatedOn())
                 .updatedOn(club.getUpdatedOn())
+                .events(club.getEvents())
                 .cityName(club.getCity().getName())
                 .countryName(club.getCity().getCountry().getName())
                 .build();
