@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.group.SpringMVCProject.mapper.ClubMapper.mapToClub;
@@ -39,9 +40,9 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public Club saveClub(ClubDto clubDto) {
         String username = SecurityUtil.getSessionUser();
-        UserEntity user = userRepository.findByUsername(username);
+        Optional<UserEntity> user = userRepository.findByUsername(username);
         Club club = mapToClub(clubDto);
-        club.setCreatedBy(user);
+        club.setCreatedBy(user.get());
         return clubRepository.save(club);
     }
 
@@ -54,12 +55,15 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public ClubDto updateClub(ClubDto clubDto) {
         String username = SecurityUtil.getSessionUser();
-        UserEntity user = userRepository.findByUsername(username);
+        Optional<UserEntity> user = userRepository.findByUsername(username);
         Club club = mapToClub(clubDto);
-        club.setCreatedBy(user);
+        club.setCreatedBy(user.get());
         clubRepository.save(club);
         return clubDto;
     }
+
+//    @Override
+//    public
 
     @Override
     public void deleteClubById(Long clubId) {
