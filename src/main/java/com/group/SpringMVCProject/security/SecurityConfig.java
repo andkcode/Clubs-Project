@@ -31,34 +31,59 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
+    // Шифрование паролей
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    // Основной фильтр безопасности
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors()
+                .cors() // Включаем CORS
                 .and()
-                .csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/clubs", "/clubs/*", "/events","/events/*","/club", "/club/*", "/events/club/*").permitAll() // ⬅️ Make these public
-                .requestMatchers("/clubs/admin/**").authenticated() // ⬅️ Admin stuff requires auth
-                .anyRequest().authenticated()
+                .csrf().disable() // Отключаем CSRF для REST API
+                .authorizeHttpRequests(auth -> auth
+                        // Публичные эндпоинты
+                        .requestMatchers(
+                                "/clubs",
+                                "/clubs/*",
+                                "/club",
+                                "/club/*",
+                                "/events",
+                                "/events/*",
+                                "/events/club/*",
+                                "/auth/**",
+                                "/register",
+                                "/promote/admin", "/promote/**"
+                        ).permitAll()
+                        // Админка
+                        .requestMatchers("/clubs/admin/**").hasRole("ADMIN")
+                        // Всё остальное — только для авторизованных
+                        .anyRequest().authenticated()
+                )
+                .httpBasic() // Basic auth (можно заменить на formLogin или JWT позже)
                 .and()
-                .httpBasic();
+                .exceptionHandling()
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                });
 
         return http.build();
     }
+
+    // Менеджер аутентификации
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
+    // CORS-конфигурация
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5173")); // Разрешаем фронтенд
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
