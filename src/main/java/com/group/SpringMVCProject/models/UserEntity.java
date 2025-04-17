@@ -28,4 +28,7 @@ public class UserEntity {
     )
 
     private List<Role> roles = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "users")
+    private List<Club> clubs = new ArrayList<>();
 }
