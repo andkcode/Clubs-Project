@@ -20,6 +20,6 @@ public class Role {
     private Long id;
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.PERSIST)
     private List<UserEntity> users = new ArrayList<>();
 }
