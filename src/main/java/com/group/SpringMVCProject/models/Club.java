@@ -27,13 +27,20 @@ public class Club {
     private String description;
     private List<String> tags;
     private String type;
-    private Integer members;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @CreationTimestamp
     private LocalDateTime createdOn;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @UpdateTimestamp
     private LocalDateTime updatedOn;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_club",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "club_id", referencedColumnName = "id")}
+    )
+    private List<UserEntity> users = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)

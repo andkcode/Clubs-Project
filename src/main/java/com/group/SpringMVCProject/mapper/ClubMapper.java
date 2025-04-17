@@ -5,9 +5,11 @@ import com.group.SpringMVCProject.dto.ClubDto;
 import com.group.SpringMVCProject.dto.EventDto;
 import com.group.SpringMVCProject.models.Club;
 import com.group.SpringMVCProject.models.Event;
+import com.group.SpringMVCProject.models.UserEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ClubMapper {
     public static Club mapToClub(ClubDto clubDto) {
@@ -18,7 +20,6 @@ public class ClubMapper {
                 .photoUrl(clubDto.getPhotoUrl())
                 .description(clubDto.getDescription())
                 .createdBy(clubDto.getCreatedBy())
-                .members(clubDto.getMembers())
                 .createdOn(clubDto.getCreatedOn())
                 .type(clubDto.getType())
                 .tags(clubDto.getTags())
@@ -50,9 +51,9 @@ public class ClubMapper {
                 .updatedOn(club.getUpdatedOn())
                 .type(club.getType())
                 .events(mapEvents(club.getEvents()))
-                .members(club.getMembers())
                 .cityName(club.getCity().getName())
                 .countryName(club.getCity().getCountry().getName())
+                .members(club.getUsers().size())
                 .build();
     }
 }
