@@ -53,4 +53,9 @@ public class ClubController {
         clubDto.setId(clubId);
         return clubService.updateClub(clubDto); // Updates and returns the club
     }
+
+//    @PutMapping("/clubs/{id}/join")
+//    public ClubDto joinClub(@PathVariable Long clubId, @Valid @RequestBody ClubDto clubDto) {
+//        clubDto.se
+//    }
 }
