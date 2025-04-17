@@ -6,12 +6,13 @@ import com.group.SpringMVCProject.models.UserEntity;
 import com.group.SpringMVCProject.repository.RoleRepository;
 import com.group.SpringMVCProject.repository.UserRepository;
 import com.group.SpringMVCProject.service.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,22 +29,34 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(RegistrationDto registrationDto) {
+        if (userRepository.findByUsername(registrationDto.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Username already taken");
+        }
+
         UserEntity user = new UserEntity();
         user.setUsername(registrationDto.getUsername());
         user.setEmail(registrationDto.getEmail());
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
-        Role role = roleRepository.findByName("USER");
-        user.setRoles(Arrays.asList(role));
+
+        String requestedRole = registrationDto.getRole() != null ? registrationDto.getRole() : "ROLE_USER";
+        Role role = roleRepository.findByName(requestedRole);
+
+        if (role == null) {
+            throw new IllegalArgumentException("Role not found: " + requestedRole);
+        }
+
+        user.setRoles(Collections.singletonList(role));
         userRepository.save(user);
     }
 
+
     @Override
-    public UserEntity findByEmail(String email) {
+    public Optional<UserEntity> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public UserEntity findByUsername(String username) {
+    public Optional<UserEntity> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 }
