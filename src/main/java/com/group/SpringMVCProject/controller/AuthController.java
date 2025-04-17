@@ -54,6 +54,24 @@ public class AuthController {
         return ResponseEntity.ok("Logged in successfully");
     }
 
+    @PostMapping("/admin")
+    public ResponseEntity<String> registerAdmin(@RequestBody RegistrationDto dto) {
+        if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
+            return ResponseEntity.badRequest().body("Username already taken");
+        }
+
+        UserEntity user = new UserEntity();
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        Role defaultRole = roleRepository.findByName("ROLE_ADMIN");
+        user.setRoles(Collections.singletonList(defaultRole));
+
+        userRepository.save(user);
+        return ResponseEntity.ok("Admin registered");
+    }
+
     @PutMapping("/users/{username}/admin")
     public ResponseEntity<String> promoteToAdmin(@PathVariable String username) {
         UserEntity user = userRepository.findByUsername(username).orElse(null);
