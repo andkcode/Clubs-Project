@@ -9,8 +9,13 @@ import com.group.SpringMVCProject.repository.UserRepository;
 import com.group.SpringMVCProject.security.SecurityUtil;
 import com.group.SpringMVCProject.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,6 +27,13 @@ import static com.group.SpringMVCProject.mapper.ClubMapper.mapToClubDto;
 public class ClubServiceImpl implements ClubService {
     private ClubRepository clubRepository;
     private UserRepository userRepository;
+
+    public UserEntity getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 
     @Autowired
     public ClubServiceImpl(ClubRepository clubRepository, UserRepository userRepository) {
@@ -74,5 +86,23 @@ public class ClubServiceImpl implements ClubService {
     public List<ClubDto> searchClubs(String query) {
         List<Club> clubs = clubRepository.searchClubs(query);
         return clubs.stream().map(club -> mapToClubDto(club)).collect(Collectors.toList());
+    }
+
+    @Override
+    public ClubDto joinClub(Long clubId) {
+        Club club = clubRepository.findById(clubId).orElseThrow(() -> new RuntimeException("Club not found"));
+
+        UserEntity currentUser = getCurrentUser();
+
+        if (club.getUsers() == null) {
+            throw new IllegalStateException("Club users list is null");
+        }
+
+        if(!club.getUsers().contains(currentUser)) {
+            club.getUsers().add(currentUser);
+            Club updatedClub = clubRepository.save(club);
+            return mapToClubDto(updatedClub);
+        }
+            return mapToClubDto(club);
     }
 }

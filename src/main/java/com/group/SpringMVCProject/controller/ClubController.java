@@ -28,7 +28,7 @@ public class ClubController {
         return clubService.findAllClubs(); // Returns JSON for Vue
     }
 
-    @GetMapping("/clubs/search")
+        @GetMapping("/search")
     public List<ClubDto> searchClub(@RequestParam("query") String query) {
         return clubService.searchClubs(query); // Returns filtered results
     }
@@ -54,8 +54,8 @@ public class ClubController {
         return clubService.updateClub(clubDto); // Updates and returns the club
     }
 
-//    @PutMapping("/clubs/{id}/join")
-//    public ClubDto joinClub(@PathVariable Long clubId, @Valid @RequestBody ClubDto clubDto) {
-//        clubDto.se
-//    }
+    @PostMapping("/{clubId}/join")
+    public ClubDto joinClub(@PathVariable Long clubId) {
+        return clubService.joinClub(clubId);
+    }
 }
