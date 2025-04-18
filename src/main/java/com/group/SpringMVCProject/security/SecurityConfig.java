@@ -48,7 +48,7 @@ public class SecurityConfig {
                         // Публичные эндпоинты
                         .requestMatchers(
                                 "/clubs",
-                                "/clubs/*",
+                                "/clubs/**",
                                 "/club",
                                 "/club/*",
                                 "/events",
@@ -56,7 +56,7 @@ public class SecurityConfig {
                                 "/events/club/*",
                                 "/auth/**",
                                 "/register",
-                                "/promote/admin", "/promote/**"
+                                "/promote/admin", "/promote/**","/{clubId}/join"
                         ).permitAll()
                         // Админка
                         .requestMatchers("/clubs/admin/**").hasRole("ADMIN")
