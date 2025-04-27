@@ -49,11 +49,6 @@ public class AuthController {
         return ResponseEntity.ok("User registered");
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> login() {
-        return ResponseEntity.ok("Logged in successfully");
-    }
-
     @PostMapping("/admin")
     public ResponseEntity<String> registerAdmin(@RequestBody RegistrationDto dto) {
         if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
