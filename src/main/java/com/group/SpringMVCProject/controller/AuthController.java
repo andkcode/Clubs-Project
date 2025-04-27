@@ -30,6 +30,15 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @GetMapping("/login")
+    public ResponseEntity<String> login(@RequestParam String email) {
+        UserEntity user = userRepository.findByEmail(email).orElse(null);
+        if(user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        return ResponseEntity.ok("Login successfull for user: " + email);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegistrationDto dto) {
         if (userRepository.findByUsername(dto.getUsername()).isPresent()) {

@@ -46,8 +46,8 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/register",
-                                "/login"
+                                "/auth/register",
+                                "/auth/login"
                         ).permitAll()
                         .requestMatchers("/clubs/admin/**", "/promote/admin", "/promote/**").hasRole("ADMIN")
                         .requestMatchers("/clubs/**/join", "/clubs",
