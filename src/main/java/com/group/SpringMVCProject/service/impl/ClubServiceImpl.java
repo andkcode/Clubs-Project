@@ -74,9 +74,6 @@ public class ClubServiceImpl implements ClubService {
         return clubDto;
     }
 
-//    @Override
-//    public
-
     @Override
     public void deleteClubById(Long clubId) {
         clubRepository.deleteById(clubId);
