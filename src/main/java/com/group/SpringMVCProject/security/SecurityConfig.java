@@ -41,37 +41,35 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors() // Включаем CORS
+                .cors()
                 .and()
-                .csrf().disable() // Отключаем CSRF для REST API
+                .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        // Публичные эндпоинты
                         .requestMatchers(
-                                "/clubs",
+                                "/register",
+                                "/login"
+                        ).permitAll()
+                        .requestMatchers("/clubs/admin/**", "/promote/admin", "/promote/**").hasRole("ADMIN")
+                        .requestMatchers("/clubs/**/join", "/clubs",
                                 "/clubs/**",
                                 "/club",
                                 "/club/*",
                                 "/events",
                                 "/events/*",
-                                "/events/club/*",
-                                "/auth/**",
-                                "/register",
-                                "/promote/admin", "/promote/**","/{clubId}/join"
-                        ).permitAll()
-                        // Админка
-                        .requestMatchers("/clubs/admin/**").hasRole("ADMIN")
-                        // Всё остальное — только для авторизованных
+                                "/events/club/*").authenticated()
                         .anyRequest().authenticated()
                 )
-                .httpBasic() // Basic auth (можно заменить на formLogin или JWT позже)
-                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint((request, response, authException) -> {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setHeader("Location", "http://localhost:5173/login");
+                            response.setHeader("Access-Control-Expose-Headers", "Location");
                 });
 
         return http.build();
     }
+
+
 
     // Менеджер аутентификации
     @Bean
