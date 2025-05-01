@@ -50,7 +50,7 @@ public class SecurityConfig {
                                 "/auth/login"
                         ).permitAll()
                         .requestMatchers("/clubs/admin/**", "/promote/admin", "/promote/**").hasRole("ADMIN")
-                        .requestMatchers("/clubs/**/join", "/clubs",
+                        .requestMatchers("/clubs/*/join", "/clubs",
                                 "/clubs/**",
                                 "/club",
                                 "/club/*",
