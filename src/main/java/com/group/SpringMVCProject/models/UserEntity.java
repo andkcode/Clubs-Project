@@ -10,7 +10,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name= "users")
+@Entity
+@Table(name= "users")
 public class UserEntity {
 
     @Id
@@ -20,7 +21,7 @@ public class UserEntity {
     private String email;
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
