@@ -54,7 +54,8 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
 
-        Role defaultRole = roleRepository.findByName("ROLE_USER");
+        Role defaultRole = roleRepository.findByName("ROLE_USER").orElseThrow(() ->
+                new RuntimeException("ROLE_USER not found"));;
         user.setRoles(Collections.singletonList(defaultRole));
 
         userRepository.save(user);
@@ -72,7 +73,8 @@ public class AuthController {
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        Role defaultRole = roleRepository.findByName("ROLE_ADMIN");
+        Role defaultRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow(() ->
+                new RuntimeException("ROLE_ADMIN not found"));;
         user.setRoles(Collections.singletonList(defaultRole));
 
         userRepository.save(user);
@@ -94,7 +96,8 @@ public class AuthController {
             return ResponseEntity.badRequest().body("User is already an admin");
         }
 
-        Role adminRole = roleRepository.findByName("ROLE_ADMIN");
+        Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow(() ->
+                new RuntimeException("ROLE_ADMIN not found"));;
 
         if (adminRole == null) {
             return ResponseEntity.internalServerError().body("Admin role not found in DB");

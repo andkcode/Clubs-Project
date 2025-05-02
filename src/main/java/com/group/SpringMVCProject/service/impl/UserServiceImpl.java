@@ -39,7 +39,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 
         String requestedRole = registrationDto.getRole() != null ? registrationDto.getRole() : "ROLE_USER";
-        Role role = roleRepository.findByName(requestedRole);
+        Role role = roleRepository.findByName(requestedRole).orElseThrow(() ->
+                new RuntimeException("ROLE_USER not found"));;
 
         if (role == null) {
             throw new IllegalArgumentException("Role not found: " + requestedRole);
