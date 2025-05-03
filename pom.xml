@@ -100,6 +100,32 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- Core library -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+
+		<!-- JWT implementation -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Jackson for JSON processing -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson or jjwt-orgjson -->
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Optional: for HMAC, RSA, or EC signing support -->
+		<!-- These are usually part of the JDK, but you might need BouncyCastle for advanced cases -->
+
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
