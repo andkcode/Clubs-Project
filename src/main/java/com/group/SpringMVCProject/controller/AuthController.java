@@ -7,10 +7,7 @@ import com.group.SpringMVCProject.models.UserEntity;
 import com.group.SpringMVCProject.repository.RoleRepository;
 import com.group.SpringMVCProject.repository.UserRepository;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Null;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -81,32 +78,5 @@ public class AuthController {
         return ResponseEntity.ok("Admin registered");
     }
 
-    @PutMapping("/users/{username}/admin")
-    public ResponseEntity<String> promoteToAdmin(@PathVariable String username) {
-        UserEntity user = userRepository.findByUsername(username).orElse(null);
-
-        if (user == null) {
-            return ResponseEntity.badRequest().body("User not found");
-        }
-
-        boolean isAlreadyAdmin = user.getRoles().stream()
-                .anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
-
-        if (isAlreadyAdmin) {
-            return ResponseEntity.badRequest().body("User is already an admin");
-        }
-
-        Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow(() ->
-                new RuntimeException("ROLE_ADMIN not found"));;
-
-        if (adminRole == null) {
-            return ResponseEntity.internalServerError().body("Admin role not found in DB");
-        }
-
-        user.getRoles().add(adminRole);
-        userRepository.save(user);
-
-        return ResponseEntity.ok("User promoted to admin");
-    }
 }
 
