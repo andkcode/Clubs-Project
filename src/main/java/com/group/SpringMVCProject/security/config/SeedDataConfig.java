@@ -1,4 +1,4 @@
-package com.group.SpringMVCProject.config;
+package com.group.SpringMVCProject.security.config;
 
 import com.group.SpringMVCProject.models.Role;
 import com.group.SpringMVCProject.models.UserEntity;
