@@ -43,7 +43,7 @@ public class ClubController {
         return clubService.findClubById(clubId); // Returns a single club as JSON
     }
 
-    @PostMapping("/clubs/new")
+    @PostMapping("/new")
     public Club saveClub(@Valid @RequestBody ClubDto clubDto) {
         return clubService.saveClub(clubDto); // Saves and returns the new club
     }

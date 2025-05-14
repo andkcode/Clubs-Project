@@ -2,6 +2,7 @@ package com.group.SpringMVCProject.dto;
 
 import com.group.SpringMVCProject.models.City;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,9 +19,9 @@ public class EventDto {
     @NotEmpty(message = "Event name should not be empty")
     private String title;
     private String description;
-    @NotEmpty(message = "Start Time should not be empty")
+    @NotNull(message = "Start Time should not be empty")
     private LocalDateTime startTime;
-    @NotEmpty(message = "End Time should not be empty")
+    @NotNull(message = "End Time should not be empty")
     private LocalDateTime endTime;
     @NotEmpty(message = "Event type should not be empty")
     private String type;
