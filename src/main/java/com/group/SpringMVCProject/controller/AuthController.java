@@ -7,6 +7,8 @@ import com.group.SpringMVCProject.models.UserEntity;
 import com.group.SpringMVCProject.repository.RoleRepository;
 import com.group.SpringMVCProject.repository.UserRepository;
 
+import com.group.SpringMVCProject.security.models.JwtAuthenticationResponse;
+import com.group.SpringMVCProject.security.services.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -20,23 +22,31 @@ public class AuthController {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public AuthController(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(UserRepository userRepository, RoleRepository roleRepository,
+                          PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody RegistrationDto dto) {
+    public ResponseEntity<?> login(@RequestBody RegistrationDto dto) {
         UserEntity user = userRepository.findByEmail(dto.getEmail()).orElse(null);
-        if(user == null) {
+
+        if (user == null) {
             return ResponseEntity.badRequest().body("User not found");
         }
-        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             return ResponseEntity.badRequest().body("Invalid password");
         }
-        return ResponseEntity.ok("Login Successful");
+
+        String jwtToken = jwtService.generateToken(user);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken));
     }
 
     @PostMapping("/register")
