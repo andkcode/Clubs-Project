@@ -98,9 +98,9 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
-    private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     private SecretKey getSigningKey() {
-        return secretKey;
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }
