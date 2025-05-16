@@ -1,7 +1,9 @@
 package com.group.SpringMVCProject.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name="countries")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

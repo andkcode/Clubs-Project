@@ -1,6 +1,8 @@
 package com.group.SpringMVCProject.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name= "users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class UserEntity {
 
     @Id
@@ -28,11 +31,9 @@ public class UserEntity {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
-    @JsonManagedReference("user-role")
     private List<Role> roles = new ArrayList<>();
 
     @ManyToMany(mappedBy = "users")
-    @JsonManagedReference("user-club")
     private List<Club> clubs = new ArrayList<>();
 
     @OneToMany(mappedBy = "createdBy")
