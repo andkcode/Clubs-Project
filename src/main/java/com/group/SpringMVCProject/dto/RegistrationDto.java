@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,6 +21,5 @@ public class RegistrationDto {
     private String email;
     @NotEmpty(message = "Password can not be empty!")
     private String password;
-    @NotEmpty(message = "Role can not be empty!")
-    private String role;
+    private List<RoleDto> roles;
 }

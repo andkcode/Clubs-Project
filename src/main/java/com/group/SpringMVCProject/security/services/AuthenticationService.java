@@ -1,6 +1,7 @@
 package com.group.SpringMVCProject.security.services;
 
 import com.group.SpringMVCProject.dto.RegistrationDto;
+import com.group.SpringMVCProject.dto.RoleDto;
 import com.group.SpringMVCProject.models.Role;
 import com.group.SpringMVCProject.models.UserEntity;
 import com.group.SpringMVCProject.repository.RoleRepository;
@@ -25,8 +26,8 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public JwtAuthenticationResponse register(RegistrationDto registrationDto) {
-        userService.saveUser(registrationDto);
+    public JwtAuthenticationResponse register(RegistrationDto registrationDto, RoleDto roleDto) {
+        userService.saveUser(registrationDto, roleDto);
 
         UserEntity user = userRepository.findByEmail(registrationDto.getEmail())
                 .orElseThrow(() -> new RuntimeException("Failed to retrieve created user"));

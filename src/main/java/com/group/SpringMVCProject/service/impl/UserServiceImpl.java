@@ -1,6 +1,7 @@
 package com.group.SpringMVCProject.service.impl;
 
 import com.group.SpringMVCProject.dto.RegistrationDto;
+import com.group.SpringMVCProject.dto.RoleDto;
 import com.group.SpringMVCProject.models.Role;
 import com.group.SpringMVCProject.models.UserEntity;
 import com.group.SpringMVCProject.repository.RoleRepository;
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveUser(RegistrationDto registrationDto) {
+    public void saveUser(RegistrationDto registrationDto, RoleDto roleDto) {
         if (userRepository.findByUsername(registrationDto.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username already taken");
         }
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(registrationDto.getEmail());
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 
-        String requestedRole = registrationDto.getRole() != null ? registrationDto.getRole() : "ROLE_USER";
+        String requestedRole = roleDto.getName() != null ? roleDto.getName() : "ROLE_USER";
         Role role = roleRepository.findByName(requestedRole)
                 .orElseThrow(() -> new RuntimeException("Role not found: " + requestedRole));
 
