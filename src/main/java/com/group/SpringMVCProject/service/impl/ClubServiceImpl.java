@@ -55,6 +55,12 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
+    public boolean isUserMemberOfClub(Long clubId) {
+        UserEntity currentUser = getCurrentUser();
+        return clubRepository.existsByIdAndUsersContaining(clubId,currentUser);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<ClubDto> findAllClubs() {
         List<Club> clubs = clubRepository.findAll();

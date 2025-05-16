@@ -22,4 +22,7 @@ public interface ClubService {
     ClubDto joinClub(Long clubId);
 
     UserEntity getCurrentUser();
+
+    boolean isUserMemberOfClub(Long clubId);
+
 }

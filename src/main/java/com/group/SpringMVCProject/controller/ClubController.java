@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/clubs") // API Endpoint for Vue.js
@@ -41,6 +42,12 @@ public class ClubController {
     @GetMapping("/{clubId}")
     public ClubDto clubDetail(@PathVariable Long clubId) {
         return clubService.findClubById(clubId); // Returns a single club as JSON
+    }
+
+    @GetMapping("/{clubId}/membership")
+    public Map<String, Boolean> checkMembership(@PathVariable Long clubId) {
+        boolean isJoined = clubService.isUserMemberOfClub(clubId);
+        return Map.of("isJoined", isJoined);
     }
 
     @PostMapping("/new")
