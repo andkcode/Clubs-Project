@@ -2,6 +2,8 @@ package com.group.SpringMVCProject.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -40,18 +42,21 @@ public class Club {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "club_id", referencedColumnName = "id")}
     )
+    @JsonBackReference("user-club")
     private List<UserEntity> users = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)
+    @JsonBackReference("user-created-clubs")
     private UserEntity createdBy;
 
     @OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE)
-    @JsonIgnore
+    @JsonManagedReference("club-event")
     private List<Event> events = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="city_id")
+    @JsonBackReference("city-clubs")
     private City city;
 
     public Club(Long id, String title, String photoUrl, String description, LocalDateTime createdOn, LocalDateTime updatedOn, UserEntity createdBy, List<Event> events) {

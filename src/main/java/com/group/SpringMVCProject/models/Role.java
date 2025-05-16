@@ -1,5 +1,6 @@
 package com.group.SpringMVCProject.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class Role {
     private Long id;
     private String name;
 
-    @ManyToMany(mappedBy = "roles", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "roles", cascade = {CascadeType.MERGE})
+    @JsonBackReference("user-role")
     private List<UserEntity> users = new ArrayList<>();
 }

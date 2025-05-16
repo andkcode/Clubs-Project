@@ -33,11 +33,11 @@ public class Event {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="club_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("club-event")
     private Club club;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="city_id")
+    @JsonBackReference("city-event")
     private City city;
-
 }
