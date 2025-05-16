@@ -50,7 +50,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegistrationDto dto) {
+    public ResponseEntity<?> register(@RequestBody RegistrationDto dto) {
         if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already taken");
         }
@@ -66,7 +66,8 @@ public class AuthController {
         user.setRoles(Collections.singletonList(defaultRole));
 
         userRepository.save(user);
-        return ResponseEntity.ok("User registered");
+        String jwtToken = jwtService.generateToken(user);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken));
     }
 
     @PostMapping("/admin")
