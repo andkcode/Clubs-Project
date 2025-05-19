@@ -23,7 +23,7 @@ public class Club {
     private Long id;
     private String title;
     private String photoUrl;
-    private String category;
+    private List<String> category;
     private String description;
     private List<String> tags;
     private String type;

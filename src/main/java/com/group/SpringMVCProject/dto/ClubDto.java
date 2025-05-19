@@ -24,7 +24,7 @@ public class ClubDto {
     private String photoUrl;
     @NotEmpty(message = "Description should not be empty")
     private String description;
-    private String category;
+    private List<String> category;
     private UserEntity createdBy;
     private String type;
     private List<String> tags;

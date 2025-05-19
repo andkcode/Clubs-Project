@@ -79,6 +79,12 @@ public class ClubServiceImpl implements ClubService {
             club.setUsers(new ArrayList<>());
         }
 
+        if(club.getCategory().isEmpty()) {
+            throw new IllegalArgumentException("Categories can not be empty!");
+        } else if (club.getCategory().size() > 3) {
+            throw new IllegalArgumentException("You can choose only up to 3 categories.");
+        }
+
         if (!club.getUsers().contains(currentUser)) {
             club.getUsers().add(currentUser);
         }
