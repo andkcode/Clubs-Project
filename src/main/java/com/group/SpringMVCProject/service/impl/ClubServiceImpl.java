@@ -8,6 +8,7 @@ import com.group.SpringMVCProject.repository.UserRepository;
 import com.group.SpringMVCProject.service.ClubService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -79,11 +80,11 @@ public class ClubServiceImpl implements ClubService {
             club.setUsers(new ArrayList<>());
         }
 
-        if(club.getCategory().isEmpty()) {
-            throw new IllegalArgumentException("Categories can not be empty!");
-        } else if (club.getCategory().size() > 3) {
-            throw new IllegalArgumentException("You can choose only up to 3 categories.");
-        }
+//        if(club.getCategory().isEmpty()) {
+//            throw new IllegalArgumentException("Categories can not be empty!");
+//        } else if (club.getCategory().size() > 3) {
+//            throw new IllegalArgumentException("You can choose only up to 3 categories.");
+//        }
 
         if (!club.getUsers().contains(currentUser)) {
             club.getUsers().add(currentUser);
@@ -137,14 +138,7 @@ public class ClubServiceImpl implements ClubService {
         clubRepository.deleteById(clubId);
     }
 
-    @Override
-    @Transactional
-    public List<ClubDto> searchClubs(String query) {
-        List<Club> clubs = clubRepository.searchClubs(query);
-        return clubs.stream()
-                .map(club -> mapToClubDto(club))
-                .collect(Collectors.toList());
-    }
+//1w
 
     @Override
     public ClubDto joinClub(Long clubId) {

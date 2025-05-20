@@ -29,10 +29,10 @@ public class ClubController {
         return clubService.findAllClubs(); // Returns JSON for Vue
     }
 
-        @GetMapping("/search")
-    public List<ClubDto> searchClub(@RequestParam("query") String query) {
-        return clubService.searchClubs(query); // Returns filtered results
-    }
+//        @GetMapping("/search")
+//    public List<ClubDto> searchClub(@RequestParam("query") String query) {
+//        return clubService.searchClubs(query); // Returns filtered results
+//    }
 
     @DeleteMapping("/{clubId}")
     public void deleteClub(@PathVariable Long clubId) {
