@@ -2,18 +2,29 @@ package com.group.SpringMVCProject.controller;
 
 
 import com.group.SpringMVCProject.dto.RegistrationDto;
+    import com.group.SpringMVCProject.models.PasswordReset;
 import com.group.SpringMVCProject.models.Role;
 import com.group.SpringMVCProject.models.UserEntity;
+import com.group.SpringMVCProject.repository.PasswordResetRepository;
 import com.group.SpringMVCProject.repository.RoleRepository;
 import com.group.SpringMVCProject.repository.UserRepository;
 
 import com.group.SpringMVCProject.security.models.JwtAuthenticationResponse;
+import com.group.SpringMVCProject.security.services.AuthenticationService;
 import com.group.SpringMVCProject.security.services.JwtService;
+import com.group.SpringMVCProject.service.EmailServiceImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,14 +33,20 @@ public class AuthController {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordResetRepository passwordResetRepository;
+    private final AuthenticationService authenticationService;
     private final JwtService jwtService;
+    private final EmailServiceImpl emailService;
 
     public AuthController(UserRepository userRepository, RoleRepository roleRepository,
-                          PasswordEncoder passwordEncoder, JwtService jwtService) {
+                          PasswordEncoder passwordEncoder, JwtService jwtService, PasswordResetRepository passwordResetRepository, AuthenticationService authenticationService, EmailServiceImpl emailService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.passwordResetRepository = passwordResetRepository;
+        this.authenticationService = authenticationService;
+        this.emailService = emailService;
     }
 
 
@@ -62,7 +79,8 @@ public class AuthController {
 
 
         Role defaultRole = roleRepository.findByName("ROLE_USER").orElseThrow(() ->
-                new RuntimeException("ROLE_USER not found"));;
+                new RuntimeException("ROLE_USER not found"));
+        ;
         user.setRoles(Collections.singletonList(defaultRole));
 
         userRepository.save(user);
@@ -82,12 +100,27 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         Role defaultRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow(() ->
-                new RuntimeException("ROLE_ADMIN not found"));;
+                new RuntimeException("ROLE_ADMIN not found"));
+        ;
         user.setRoles(Collections.singletonList(defaultRole));
 
         userRepository.save(user);
         return ResponseEntity.ok("Admin registered");
     }
 
-}
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam("email") String email) {
+        Optional<UserEntity> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
+        }
+
+        String token = UUID.randomUUID().toString();
+        PasswordReset reset = new PasswordReset(null, email, token, LocalDateTime.now().plusMinutes(15));
+        passwordResetRepository.save(reset);
+
+        emailService.sendResetEmail(email, token);
+
+        return ResponseEntity.ok("Reset link sent to your email");
+    }
 
