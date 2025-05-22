@@ -138,8 +138,18 @@ public class AuthenticationService {
         }
     }
 
-    public void resetPassword(String token, String newPassword) {
-        PasswordReset reset = passwordResetRepository.findByToken(token).orElseThrow(() -> new RuntimeException("Invalid or expired token"));
+    @Transactional
+    public void resetPassword(ResetPasswordRequestDto resetPasswordRequestDto) {
+        try {
+            // Validate input
+            if (resetPasswordRequestDto.getNewToken() == null || resetPasswordRequestDto.getNewToken().trim().isEmpty()) {
+                log.warn("Password reset attempted with missing token");
+                throw new IllegalArgumentException("Reset token is required");
+            }
+
+            if (resetPasswordRequestDto.getNewPassword() == null || resetPasswordRequestDto.getNewPassword().trim().isEmpty()) {
+                throw new IllegalArgumentException("New password is required");
+            }
 
         if(reset.getExpire().isBefore(LocalDateTime.now())) {
             throw new RuntimeException("Token expired");
