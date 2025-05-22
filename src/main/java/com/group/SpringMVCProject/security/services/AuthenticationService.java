@@ -1,6 +1,8 @@
 package com.group.SpringMVCProject.security.services;
 
+import com.group.SpringMVCProject.dto.PasswordResetDto;
 import com.group.SpringMVCProject.dto.RegistrationDto;
+import com.group.SpringMVCProject.dto.ResetPasswordRequestDto;
 import com.group.SpringMVCProject.dto.RoleDto;
 import com.group.SpringMVCProject.models.PasswordReset;
 import com.group.SpringMVCProject.models.Role;
@@ -10,21 +12,26 @@ import com.group.SpringMVCProject.repository.RoleRepository;
 import com.group.SpringMVCProject.repository.UserRepository;
 import com.group.SpringMVCProject.security.models.JwtAuthenticationResponse;
 import com.group.SpringMVCProject.service.UserService;
+import com.group.SpringMVCProject.service.impl.EmailServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
 
     private final UserRepository userRepository;
@@ -32,20 +39,33 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final EmailServiceImpl emailService;
     private final AuthenticationManager authenticationManager;
     private final PasswordResetRepository passwordResetRepository;
 
+    @Transactional
     public JwtAuthenticationResponse register(RegistrationDto registrationDto, RoleDto roleDto) {
         userService.saveUser(registrationDto, roleDto);
+        try {
+            userService.saveUser(registrationDto, roleDto);
 
         UserEntity user = userRepository.findByEmail(registrationDto.getEmail())
                 .orElseThrow(() -> new RuntimeException("Failed to retrieve created user"));
+            UserEntity user = userRepository.findByEmail(registrationDto.getEmail())
+                    .orElseThrow(() -> new RuntimeException("Failed to retrieve created user"));
 
-        String jwt = jwtService.generateToken(user);
+            String jwt = jwtService.generateToken(user);
 
-        return JwtAuthenticationResponse.builder()
-                .token(jwt)
-                .build();
+            return JwtAuthenticationResponse.builder()
+                    .token(jwt)
+                    .build();
+        } catch (DataAccessException e) {
+            log.error("Database error during user registration", e);
+            throw new RuntimeException("Registration failed due to database error");
+        } catch (Exception e) {
+            log.error("Unexpected error during user registration", e);
+            throw new RuntimeException("Registration failed");
+        }
     }
 
     public JwtAuthenticationResponse login(RegistrationDto registrationDto) {
@@ -65,6 +85,7 @@ public class AuthenticationService {
                     .token(jwt)
                     .build();
         } catch (BadCredentialsException e) {
+            log.warn("Bad credentials for email: {}", registrationDto.getEmail());
             throw new IllegalArgumentException("Invalid email or password");
         }
     }
