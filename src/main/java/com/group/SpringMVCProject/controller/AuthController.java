@@ -66,20 +66,11 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Username already taken");
         }
 
-        UserEntity user = new UserEntity();
-        user.setUsername(dto.getUsername());
-        user.setEmail(dto.getEmail());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        RoleDto roleDto = new RoleDto(); // или создавай на стороне клиента
+        roleDto.setName("ROLE_USER");
 
-
-        Role defaultRole = roleRepository.findByName("ROLE_USER").orElseThrow(() ->
-                new RuntimeException("ROLE_USER not found"));
-        ;
-        user.setRoles(Collections.singletonList(defaultRole));
-
-        userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken));
+        JwtAuthenticationResponse response = authenticationService.register(dto, roleDto);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/admin")
