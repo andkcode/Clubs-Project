@@ -90,11 +90,31 @@ public class AuthenticationService {
         }
     }
 
-    public void generateResetToken(String email) {
-        Optional<UserEntity> user = userRepository.findByEmail(email);
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("Email not found");
+    @Transactional
+    public JwtAuthenticationResponse registerAdmin(RegistrationDto dto) {
+        try {
+            RoleDto roleDto = new RoleDto();
+            roleDto.setName("ROLE_ADMIN");
+            return register(dto, roleDto);
+        } catch (Exception e) {
+            log.error("Failed to register admin user", e);
+            throw new RuntimeException("Admin registration failed");
         }
+    }
+
+    @Transactional
+    public void generateResetToken(PasswordResetDto passwordResetDto) {
+        try {
+            // Validate email
+            if (passwordResetDto.getEmail() == null || passwordResetDto.getEmail().trim().isEmpty()) {
+                throw new IllegalArgumentException("Email is required");
+            }
+
+            UserEntity user = userRepository.findByEmail(passwordResetDto.getEmail())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            // Clean up any existing expired tokens for this email
+            cleanupExpiredTokens(passwordResetDto.getEmail());
 
         String token = UUID.randomUUID().toString();
         LocalDateTime expire = LocalDateTime.now().plusMinutes(15);
