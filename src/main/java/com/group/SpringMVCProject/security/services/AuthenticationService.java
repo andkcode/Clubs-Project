@@ -116,11 +116,26 @@ public class AuthenticationService {
             // Clean up any existing expired tokens for this email
             cleanupExpiredTokens(passwordResetDto.getEmail());
 
-        String token = UUID.randomUUID().toString();
-        LocalDateTime expire = LocalDateTime.now().plusMinutes(15);
+            String token = UUID.randomUUID().toString();
+            log.debug("Generated reset token for email: {}", passwordResetDto.getEmail());
 
-        PasswordReset resetToken = new PasswordReset(null, email, token, expire);
-        System.out.println("Reset link: http://localhost:8080/reset-password?token=" + token);
+            LocalDateTime expire = LocalDateTime.now().plusMinutes(15);
+
+            PasswordReset resetToken = new PasswordReset(null, passwordResetDto.getEmail(), token, expire);
+            PasswordReset saved = passwordResetRepository.save(resetToken);
+            log.debug("Saved reset token to database for email: {}", passwordResetDto.getEmail());
+
+            // Send email after successful database save
+            emailService.sendResetEmail(passwordResetDto.getEmail(), token);
+
+        } catch (UsernameNotFoundException e) {
+            log.warn("Password reset attempted for non-existent email: {}", passwordResetDto.getEmail());
+            // Don't throw exception to prevent email enumeration
+            // Instead, log and silently ignore
+        } catch (Exception e) {
+            log.error("Error generating reset token for email: {}", passwordResetDto.getEmail(), e);
+            throw new RuntimeException("Failed to generate reset token");
+        }
     }
 
     public void resetPassword(String token, String newPassword) {
