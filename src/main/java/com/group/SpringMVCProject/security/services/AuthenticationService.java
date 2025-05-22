@@ -177,7 +177,6 @@ public class AuthenticationService {
             user.setPassword(passwordEncoder.encode(resetPasswordRequestDto.getNewPassword()));
             userRepository.save(user);
 
-        passwordResetRepository.delete(reset);
             passwordResetRepository.delete(reset);
 
             log.info("Password reset completed successfully for email: {}", reset.getEmail());
@@ -190,5 +189,16 @@ public class AuthenticationService {
         }
     }
 
+    @Transactional
+    private void cleanupExpiredTokens(String email) {
+        try {
+            List<PasswordReset> expiredTokens = passwordResetRepository.findByEmailAndExpireBefore(email, LocalDateTime.now());
+            if (!expiredTokens.isEmpty()) {
+                passwordResetRepository.deleteAll(expiredTokens);
+                log.debug("Cleaned up {} expired tokens for email: {}", expiredTokens.size(), email);
+            }
+        } catch (Exception e) {
+            log.warn("Failed to cleanup expired tokens for email: {}", email, e);
+        }
     }
 }
