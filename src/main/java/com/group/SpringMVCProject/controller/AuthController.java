@@ -86,21 +86,8 @@ public class AuthController {
 
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestParam("email") String email) {
-        Optional<UserEntity> userOpt = userRepository.findByEmail(email);
-    public ResponseEntity<?> forgotPassword(@RequestBody PasswordResetDto passwordResetDto) {
-        Optional<UserEntity> userOpt = userRepository.findByEmail(passwordResetDto.getEmail());
-
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
-        }
-
-        String token = UUID.randomUUID().toString();
-        PasswordReset reset = new PasswordReset(null, passwordResetDto.getEmail(), token, LocalDateTime.now().plusMinutes(15));
-        passwordResetRepository.save(reset);
-
-        emailService.sendResetEmail(passwordResetDto.getEmail(), token);
-
+    public ResponseEntity<?> generateResetToken(@RequestBody PasswordResetDto passwordResetDto) {
+        authenticationService.generateResetToken(passwordResetDto);
         return ResponseEntity.ok("Reset link sent to your email");
     }
 
