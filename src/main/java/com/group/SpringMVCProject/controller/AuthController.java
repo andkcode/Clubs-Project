@@ -2,7 +2,9 @@ package com.group.SpringMVCProject.controller;
 
 
 import com.group.SpringMVCProject.dto.RegistrationDto;
-    import com.group.SpringMVCProject.models.PasswordReset;
+import com.group.SpringMVCProject.dto.ResetPasswordRequest;
+import com.group.SpringMVCProject.models.PasswordReset;
+import com.group.SpringMVCProject.models.PasswordResetDto;
 import com.group.SpringMVCProject.models.Role;
 import com.group.SpringMVCProject.models.UserEntity;
 import com.group.SpringMVCProject.repository.PasswordResetRepository;
@@ -12,15 +14,12 @@ import com.group.SpringMVCProject.repository.UserRepository;
 import com.group.SpringMVCProject.security.models.JwtAuthenticationResponse;
 import com.group.SpringMVCProject.security.services.AuthenticationService;
 import com.group.SpringMVCProject.security.services.JwtService;
-import com.group.SpringMVCProject.service.EmailServiceImpl;
+import com.group.SpringMVCProject.service.impl.EmailServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
@@ -111,15 +110,18 @@ public class AuthController {
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestParam("email") String email) {
         Optional<UserEntity> userOpt = userRepository.findByEmail(email);
+    public ResponseEntity<?> forgotPassword(@RequestBody PasswordResetDto passwordResetDto) {
+        Optional<UserEntity> userOpt = userRepository.findByEmail(passwordResetDto.getEmail());
+
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
         }
 
         String token = UUID.randomUUID().toString();
-        PasswordReset reset = new PasswordReset(null, email, token, LocalDateTime.now().plusMinutes(15));
+        PasswordReset reset = new PasswordReset(null, passwordResetDto.getEmail(), token, LocalDateTime.now().plusMinutes(15));
         passwordResetRepository.save(reset);
 
-        emailService.sendResetEmail(email, token);
+        emailService.sendResetEmail(passwordResetDto.getEmail(), token);
 
         return ResponseEntity.ok("Reset link sent to your email");
     }
