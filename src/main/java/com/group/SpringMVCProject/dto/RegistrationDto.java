@@ -22,4 +22,8 @@ public class RegistrationDto {
     @NotEmpty(message = "Password can not be empty!")
     private String password;
     private List<RoleDto> roles;
+
+    public RegistrationDto(String email) {
+        this.email = email;
+    }
 }
