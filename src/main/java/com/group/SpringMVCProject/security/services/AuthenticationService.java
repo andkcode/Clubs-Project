@@ -82,4 +82,18 @@ public class AuthenticationService {
         System.out.println("Reset link: http://localhost:8080/reset-password?token=" + token);
     }
 
+    public void resetPassword(String token, String newPassword) {
+        PasswordReset reset = passwordResetRepository.findByToken(token).orElseThrow(() -> new RuntimeException("Invalid or expired token"));
+
+        if(reset.getExpire().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Token expired");
+        }
+
+        UserEntity user = userRepository.findByEmail(reset.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        passwordResetRepository.delete(reset);
+    }
 }
