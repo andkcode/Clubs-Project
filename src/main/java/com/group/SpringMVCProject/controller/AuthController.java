@@ -1,10 +1,11 @@
 package com.group.SpringMVCProject.controller;
 
 
+import com.group.SpringMVCProject.dto.PasswordResetDto;
 import com.group.SpringMVCProject.dto.RegistrationDto;
-import com.group.SpringMVCProject.dto.ResetPasswordRequest;
+import com.group.SpringMVCProject.dto.ResetPasswordRequestDto;
+import com.group.SpringMVCProject.dto.RoleDto;
 import com.group.SpringMVCProject.models.PasswordReset;
-import com.group.SpringMVCProject.models.PasswordResetDto;
 import com.group.SpringMVCProject.models.Role;
 import com.group.SpringMVCProject.models.UserEntity;
 import com.group.SpringMVCProject.repository.PasswordResetRepository;
@@ -51,18 +52,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody RegistrationDto dto) {
-        UserEntity user = userRepository.findByEmail(dto.getEmail()).orElse(null);
-
-        if (user == null) {
-            return ResponseEntity.badRequest().body("User not found");
+        try {
+            JwtAuthenticationResponse response = authenticationService.login(dto);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
-
-        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            return ResponseEntity.badRequest().body("Invalid password");
-        }
-
-        String jwtToken = jwtService.generateToken(user);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken));
     }
 
     @PostMapping("/register")
