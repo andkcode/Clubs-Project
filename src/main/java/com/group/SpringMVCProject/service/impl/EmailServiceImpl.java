@@ -1,4 +1,4 @@
-package com.group.SpringMVCProject.service;
+package com.group.SpringMVCProject.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -13,7 +13,7 @@ public class EmailServiceImpl {
 
     public void sendResetEmail(String toEmail, String token) {
         String subject = "Password Reset Request";
-        String resetLink = "http://localhost:8080/reset-password?token=" + token;
+        String resetLink = "http://localhost:5173/reset-password?token=" + token;
         String message = "Hi,\n\nClick the following link to reset your password:\n" + resetLink +
                 "\n\nThis link will expire in 15 minutes.";
 
@@ -21,7 +21,6 @@ public class EmailServiceImpl {
         email.setTo(toEmail);
         email.setSubject(subject);
         email.setText(message);
-        email.setFrom("akiricuk37@gmail.com");
 
         mailSender.send(email);
     }
