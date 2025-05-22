@@ -45,12 +45,9 @@ public class AuthenticationService {
 
     @Transactional
     public JwtAuthenticationResponse register(RegistrationDto registrationDto, RoleDto roleDto) {
-        userService.saveUser(registrationDto, roleDto);
         try {
             userService.saveUser(registrationDto, roleDto);
 
-        UserEntity user = userRepository.findByEmail(registrationDto.getEmail())
-                .orElseThrow(() -> new RuntimeException("Failed to retrieve created user"));
             UserEntity user = userRepository.findByEmail(registrationDto.getEmail())
                     .orElseThrow(() -> new RuntimeException("Failed to retrieve created user"));
 
