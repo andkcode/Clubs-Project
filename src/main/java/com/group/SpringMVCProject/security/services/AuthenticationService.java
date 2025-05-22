@@ -151,15 +151,44 @@ public class AuthenticationService {
                 throw new IllegalArgumentException("New password is required");
             }
 
-        if(reset.getExpire().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Token expired");
-        }
+            String token = resetPasswordRequestDto.getNewToken().trim();
+            log.debug("Processing password reset for token");
 
-        UserEntity user = userRepository.findByEmail(reset.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            Optional<PasswordReset> resetOptional = passwordResetRepository.findByToken(token);
 
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
+            if (resetOptional.isEmpty()) {
+                log.warn("Password reset attempted with invalid token");
+                throw new IllegalArgumentException("Invalid or expired reset token");
+            }
+
+            PasswordReset reset = resetOptional.get();
+            log.debug("Found reset token for email: {}", reset.getEmail());
+
+            // Check if token has expired
+            if (reset.getExpire().isBefore(LocalDateTime.now())) {
+                log.warn("Password reset attempted with expired token for email: {}", reset.getEmail());
+                passwordResetRepository.delete(reset);
+                throw new IllegalArgumentException("Reset token has expired");
+            }
+
+            UserEntity user = userRepository.findByEmail(reset.getEmail())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            user.setPassword(passwordEncoder.encode(resetPasswordRequestDto.getNewPassword()));
+            userRepository.save(user);
 
         passwordResetRepository.delete(reset);
+            passwordResetRepository.delete(reset);
+
+            log.info("Password reset completed successfully for email: {}", reset.getEmail());
+
+        } catch (IllegalArgumentException | UsernameNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error during password reset", e);
+            throw new RuntimeException("Password reset failed");
+        }
+    }
+
     }
 }
