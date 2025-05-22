@@ -73,25 +73,17 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    // FOR EDITING AND REPAIRING
     @PostMapping("/admin")
-    public ResponseEntity<String> registerAdmin(@RequestBody RegistrationDto dto) {
+    public ResponseEntity<?> registerAdmin(@RequestBody RegistrationDto dto) {
         if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already taken");
         }
 
-        UserEntity user = new UserEntity();
-        user.setUsername(dto.getUsername());
-        user.setEmail(dto.getEmail());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-
-        Role defaultRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow(() ->
-                new RuntimeException("ROLE_ADMIN not found"));
-        ;
-        user.setRoles(Collections.singletonList(defaultRole));
-
-        userRepository.save(user);
-        return ResponseEntity.ok("Admin registered");
+        JwtAuthenticationResponse response = authenticationService.registerAdmin(dto);
+        return ResponseEntity.ok(response);
     }
+
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestParam("email") String email) {
