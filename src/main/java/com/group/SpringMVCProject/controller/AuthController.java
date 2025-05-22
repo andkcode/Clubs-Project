@@ -98,3 +98,4 @@ public class AuthController {
         return ResponseEntity.ok("Password has been reset successfully.");
     }
 }
+
